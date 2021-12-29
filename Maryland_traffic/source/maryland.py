@@ -307,6 +307,9 @@ def evaluate():
 
 
 def plot():
+    f = plt.figure()
+    f.set_figwidth(14)
+
     plt.plot(validation_set.iloc[:, subarea_index], label='validation set (ground truth)')
 
     idx = pd.date_range(traffic.index[-len(gru_test_predict)], periods=len(gru_test_predict), freq='H')
@@ -318,7 +321,12 @@ def plot():
     plt.show()
 
 
-# prepare_data()
+def train_models():
+    train('gru')
+    train('lstm')
+
+
+prepare_data()
 
 # prepare for training:
 traffic = pd.read_csv('aggregated_subareas_columns.csv', index_col=0, parse_dates=True)
@@ -386,10 +394,10 @@ gru_model = set_model_gru()
 lstm_model = set_model_lstm()
 arima_model = set_model_arima()
 
-train('gru')
-trained_gru = load_model('trained_gru_model')
 
-# train('lstm')
+# train_models()  # <<<< ------- Comment out if we only want predictions  ------- >>>>
+
+trained_gru = load_model('trained_gru_model')
 trained_lstm = load_model('trained_lstm_model')
 
 # gru predict
