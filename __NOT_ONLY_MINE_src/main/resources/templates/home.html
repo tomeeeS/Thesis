@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <title>Kezdőoldal</title>
+</head>
+
+<body style="background: url(https://wallpaperxyz.com/wp-content/uploads/Website-Background-Images-HD-Free-Download-Wallpaperxyz.com-36.jpg) no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  background-size: cover;
+  -o-background-size: cover;">
+
+<nav th:replace="fragments/nav :: nav"></nav>
+
+<div th:if="${(fuvarokToBeRatedAsSofor != null && !fuvarokToBeRatedAsSofor.isEmpty()) ||
+ (fuvarokToBeRatedAsUtas != null && !fuvarokToBeRatedAsUtas.isEmpty())}">
+    <nav th:replace="fragments/feedback-notification :: feedback"></nav>
+</div>
+
+<div class="container mx-auto" style="max-width: 1000px">
+    <div class="card border-0 shadow my-5">
+        <div class="card-body p-5">
+            <div class="w-auto p-3 bg-white text-dark">
+                <div class="jumbotron text-white text-center"
+                     style="background-image: url(https://cdn.pixabay.com/photo/2016/01/29/15/30/car-1168158_960_720.jpg); background-size: cover">
+                    <h1 class="display-3"><p class="font-weight-bold">Telki autó megosztás</p></h1>
+                    <p class="lead font-weight-bold">Adj fel egy hirdetést!</p>
+                    <div class="dropdown">
+                        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton"
+                                data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">
+                            Hirdetésfeladás
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="/driverADV">Sofőrként</a>
+                            <a class="dropdown-item" href="/passangerADV">Utasként</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row featurette">
+                    <div class="d-flex align-items-center">
+                        <div class=" col-md-7 text-center text-dark">
+                            <h1 class="featurette-heading">Keress egy megfelelő hirdetést!</h1>
+                            <p class="lead">Minden nap órákat állsz a dugóban? Nincs autód de szeretnél bejutni a
+                                városba
+                                vagy hazajutni? Nem szereted a tömegközlekedést? Ezen az oldalon találhatsz egy számodra
+                                megfelelő
+                                fuvart. Különböző szűrők segítségével találd meg a megfelelő utazást. Kereshetsz akár
+                                utazótársat is
+                                magadnak.</p>
+                            <a class="btn btn-primary" href="/allAdvertisement" role="button">Részletek</a>
+                        </div>
+                        <div class="col-md-5">
+                            <img th:src="@{pic/rideshare.jpg}" class="card-img-top" alt="...">
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="featurette-divider">
+
+                <div class="row row-cols-2 row-cols-md-2">
+
+                    <div class="col mb-4">
+                        <div class="d-flex justify-content-end">
+                            <div class="card" style="width: 18rem;">
+                                <img th:src="@{pic/car_sharing.jpg}" class="card-img-top" alt="...">
+                                <div class="card-body">
+                                    <h5 class="card-title">Telki - Budapest</h5>
+                                    <p class="card-text">Itt található a jelenleg meghirdetett utak Telkiből Budapest
+                                        irányába.</p>
+                                    <a href="/telki-budapest" class="btn btn-primary">Megtekintés</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col mb-4">
+                        <div class="d-flex justify-content-start">
+                            <div class="card" style="width: 18rem;">
+                                <img th:src="@{pic/car_sharing.jpg}" class="card-img-top" alt="...">
+                                <div class="card-body">
+                                    <h5 class="card-title">Budapest - Telki</h5>
+                                    <p class="card-text">Itt található a jelenleg meghirdetett utak Budapestről Telki
+                                        irányába.</p>
+                                    <a href="/budapest-telki" class="btn btn-primary">Megtekintés</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col mb-4">
+                        <div class="d-flex justify-content-end">
+                            <div class="card" style="width: 18rem;">
+                                <img th:src="@{pic/driver.jpg}" class="card-img-top" alt="...">
+                                <div class="card-body">
+                                    <h5 class="card-title">Sofőrök hirdetései</h5>
+                                    <p class="card-text">Tekintse meg az összes sofőr hirdetését ami jelenleg
+                                        található.</p>
+                                    <a href="/osszesSofor" class="btn btn-primary">Megtekintés</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col mb-4">
+                        <div class="d-flex justify-content-start">
+                            <div class="card" style="width: 18rem;">
+                                <img th:src="@{pic/passanger.jpg}" class="card-img-top" alt="...">
+                                <div class="card-body">
+                                    <h5 class="card-title">Utasok hirdetései</h5>
+                                    <p class="card-text">Tekintse meg az összes sofőr hirdetését ami jelenleg
+                                        található.</p>
+                                    <a href="/osszesUtas" class="btn btn-primary">Megteniktés</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <title>Regisztráció</title>
+</head>
+<body style="background: url(https://wallpaperxyz.com/wp-content/uploads/Website-Background-Images-HD-Free-Download-Wallpaperxyz.com-36.jpg) no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  background-size: cover;
+  -o-background-size: cover;">
+
+<nav th:replace="fragments/nav :: nav"></nav>
+
+<div class="container mx-auto" style="max-width: 1000px">
+    <div class="card border-0 shadow my-5">
+        <div class="card-body p-5">
+            <div class="w-auto p-3">
+
+                <form th:action="@{/user/registration}" th:object="${user}" method="POST" enctype="utf8">
+
+                    <div class="mb-4 p-5 text-center" style="background: yellow">
+                        <h4>Regisztráció</h4>
+                        Figyelmesen add meg az adataidat.
+                    </div>
+
+                    <div th:if="${#fields.hasErrors('*')}" class="alert alert-danger col-xs-offset-1 col-xs-10">
+                        <ul>
+                            <li th:each="err : ${#fields.errors('*')}" th:text="${err}">Hibás adatok.</li>
+                        </ul>
+                    </div>
+
+                    <div class="form-group">
+                        Keresztnév
+                        <input type="text" th:field="*{firstName}" class="form-control"
+                               placeholder="Keresztnév" required>
+                        <div class="valid-feedback">
+                            Jónak látszik!
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        Vezetéknév
+                        <input type="text" th:field="*{lastName}" class="form-control"
+                               placeholder="Vezetéknév" required>
+                        <div class="valid-feedback">
+                            Jónak látszik!
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        Email cím
+                        <input type="email" th:field="*{email}" name="username" class="form-control"
+                               aria-describedby="emailHelp" placeholder="példa@valami.hu" required>
+                    </div>
+                    <div class="form-group">
+                        Telefon szám
+                        <input type="text" th:field="*{tel}" name="username" class="form-control"
+                               placeholder="06 30 123 4567"
+                               id="tel" required>
+                    </div>
+                    <div class="form-group">
+                        Jelszó
+                        <input type="password" th:field="*{password}" name="password" class="form-control"
+                               placeholder="Jelszó" required>
+                    </div>
+                    <div class="form-group">
+                        Jelszó újra
+                        <input type="password" th:field="*{matchingPassword}" name="password" class="form-control"
+                               placeholder="Jelszó" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Regisztráció</button>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+<script>
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+</script>
+
+</body>
+</html>

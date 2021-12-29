@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+		  integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+	<title>Utazás értékelése</title>
+</head>
+<body th:id="${fuvar.id}" style="background: url(https://wallpaperxyz.com/wp-content/uploads/Website-Background-Images-HD-Free-Download-Wallpaperxyz.com-36.jpg) no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  background-size: cover;
+  -o-background-size: cover;">
+
+<nav th:replace="fragments/nav :: nav"></nav>
+
+<div th:if="${(fuvarokToBeRatedAsSofor != null && !fuvarokToBeRatedAsSofor.isEmpty()) ||
+ (fuvarokToBeRatedAsUtas != null && !fuvarokToBeRatedAsUtas.isEmpty())}">
+	<nav th:replace="fragments/feedback-notification :: feedback"></nav>
+</div>
+
+<div class="container my-auto" style="max-width: 1000px">
+	<div class="card border-0 shadow my-5">
+		<div class="card-body p-5">
+
+			<div>
+				<h1>Visszajelzés</h1>
+			</div>
+
+			<ul class="list-group">
+				<li class="list-group-item my-3 border">
+					<h3>Fuvar adatai</h3>
+					<p th:text="${fuvar.indulasiHely}"></p>
+<!--					TODO stb-->
+				</li>
+
+				<li class="list-group-item my-3 border">
+					<h3>Megjelentél?</h3>
+					<input id="completed" type="checkbox">
+					<p>Megjelent a sofőr?</p>
+				</li>
+
+				<li class="list-group-item my-3 border">
+					<h3>értékeld a sofőrt</h3>
+
+					<div class="table-responsive">
+						<table class="table table-hover">
+							<thead>
+							<tr>
+								<th scope="col">Sofőr neve</th>
+								<th scope="col">Email cím</th>
+								<th scope="col">Telefonszám</th>
+								<th scope="col">értékelés</th>
+								<th scope="col">megjelent</th>
+							</tr>
+							</thead>
+							<tbody id="sofor">
+							<tr th:id="${fuvar.sofor.id}" class="table-default" >
+								<td><span th:text="${fuvar.sofor.fullName}"></span></td>
+								<td><span th:text="${fuvar.sofor.email}"></span></td>
+								<td><span th:text="${fuvar.sofor.tel}"></span></td>
+								<td><select th:id="'sofor-rating-' + ${fuvar.sofor.id}" class="form-control" name="rating">
+									<option th:each="i : ${#numbers.sequence(1, 5)}" th:value="${i}" th:text="${i}">
+									</option>
+								</select></td>
+								<td><input th:id="'sofor-present-' + ${fuvar.sofor.id}" type="checkbox" checked
+										   class="utas-present-checkbox" name="wasPresent"></td>
+							</tr>
+
+							</tbody>
+						</table>
+
+					</div>
+				</li>
+
+			</ul>
+
+			<div class="row">
+				<div class="col">
+					<button id="submit" type="submit" class="btn btn-primary">Visszajelzés küldése</button>
+				</div>
+			</div>
+
+
+		</div>
+	</div>
+</div>
+
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+		integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+		crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+		integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+		crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+		integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+		crossorigin="anonymous"></script>
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script>
+	$(document).ready(function () {
+		$(".utas-present-checkbox").change(passengerPresentTableColor)
+		$("#submit").click(sendFeedback)
+	});
+
+	function sendFeedback() {
+		let id = $('body').attr('id');
+		let completed = $('#completed').is(':checked');
+
+		var userFeedbacks = [];
+		userFeedbacks.push({
+				"userId": $('#sofor').find('tr').attr('id'),
+				"rating": $('#sofor').find('tr').find('select[name*="rating"]').val(),
+				"wasPresent": $('#sofor').find('input[name*="wasPresent"]').is(':checked')
+			});
+
+		$.ajax({
+			url: "/fuvar/passenger-feedback/" + id,
+			type: "post",
+			dataType: "json",
+			contentType: "application/json",
+			data: JSON.stringify({
+				completed: completed,
+				userFeedbacks: userFeedbacks
+			}),
+			async: true,
+			complete:function(error) {
+					// console.log(error);
+					 window.location.href = "/home";
+				}
+		});
+
+	}
+
+	function passengerPresentTableColor() {
+		// var checkbox = $(this);
+		if ($(this).is(':checked')) {
+			$(this).parent().parent().removeClass("table-danger")
+			$(this).parent().parent().addClass("table-default")
+		} else {
+			$(this).parent().parent().removeClass("table-default")
+			$(this).parent().parent().addClass("table-danger")
+		}
+	}
+</script>
+</body>
+</html>

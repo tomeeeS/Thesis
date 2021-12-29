@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<nav th:if="${!fuvarokToBeRatedAsSofor.isEmpty()}" class="navbar navbar-expand-lg navbar-dark static-top"
+     style="background: none" th:fragment="feedback">
+    <div class="container" style="max-width: 1000px">
+		<span class="navbar-text">Értékelés elérhető korábbi fuvarjaidról!</span>
+        <a class="btn btn-outline-warning my-2 my-sm-0" href="/profil">Részletek</a>
+    </div>
+</nav>
+
+<nav th:if="${!fuvarokToBeRatedAsUtas.isEmpty()}" class="navbar navbar-expand-lg navbar-dark static-top"
+     style="background: none" th:fragment="feedback">
+    <div class="container" style="max-width: 1000px">
+        <span class="navbar-text">Értékelés elérhető korábbi utazásaidról!</span>
+        <a class="btn btn-outline-warning my-2 my-sm-0" href="/profil">Részletek</a>
+    </div>
+</nav>
+
+<!--<div class="container mx-auto" style="max-width: 1000px">
+    <div class="card border-0 shadow my-5" th:fragment="feedback">
+        <div th:if="${!fuvarokToBeRatedAsSofor.isEmpty()}" class="row">
+            <h3>Kérjük adj visszajelzést elmúlt saját fuvarjaidról:</h3>
+            <table class="table">
+                <tbody>
+                <tr th:each="fuvar : ${fuvarokToBeRatedAsSofor}">
+                    <td th:text="${fuvar.indulasiIdoString}"></td>
+                    &lt;!&ndash;TODO uticél vagy vlami egyéb azonosító, x napja történt, h egyértelmű legyen, melyik fuvar&ndash;&gt;
+                    <td><a th:href="@{'/fuvar/feedback/' + ${fuvar.id}}" class="btn btn-primary">Értékelem</a></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div th:if="${!fuvarokToBeRatedAsUtas.isEmpty()}" class="row">
+            <h3>Kérjük adj visszajelzést elmúlt utazásaidról:</h3>
+            <table class="table">
+                <tbody>
+                <tr th:each="fuvar : ${fuvarokToBeRatedAsUtas}">
+                    <td th:text="${fuvar.indulasiIdoString}"></td>
+                    &lt;!&ndash;TODO uticél vagy vlami egyéb azonosító&ndash;&gt;
+                    <td th:text="${fuvar.sofor.fullName}"></td>
+                    <td><a th:href="@{'/fuvar/feedback/' + ${fuvar.id}}" class="btn btn-primary">Értékelem</a></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>-->
+
+</body>
+</html>

@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <!-- Special version of Bootstrap that only affects content wrapped in .bootstrap-iso -->
+    <link rel="stylesheet" href="https://formden.com/static/cdn/bootstrap-iso.css"/>
+
+    <!--Font Awesome (added because you use icons in your prepend/append)-->
+    <link rel="stylesheet" href="https://formden.com/static/cdn/font-awesome/4.4.0/css/font-awesome.min.css"/>
+
+    <!-- Inline CSS based on choices in "Settings" tab -->
+    <link rel="stylesheet" type="text/css" href="css/DatePicker.css">
+
+    <!-- Google Maps -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <script
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDuArTiAzCE-qSM5hoC3hZ0EFL--RKEaCE&callback=initAutocomplete&libraries=places&v=weekly"
+            defer
+    ></script>
+    <link rel="stylesheet" type="text/css" href="css/GoogleMaps.css"/>
+    <script src="js/GoogleMaps.js"></script>
+
+    <title>Hirdetések</title>
+</head>
+<body style="background: url(https://wallpaperxyz.com/wp-content/uploads/Website-Background-Images-HD-Free-Download-Wallpaperxyz.com-36.jpg) no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  background-size: cover;
+  -o-background-size: cover;">
+
+<nav th:replace="fragments/nav :: nav"></nav>
+
+<div th:if="${(fuvarokToBeRatedAsSofor != null && !fuvarokToBeRatedAsSofor.isEmpty()) ||
+ (fuvarokToBeRatedAsUtas != null && !fuvarokToBeRatedAsUtas.isEmpty())}">
+    <nav th:replace="fragments/feedback-notification :: feedback"></nav>
+</div>
+
+<div class="container mx-auto" style="max-width: 1000px">
+    <div class="card border-0 shadow my-5">
+        <div class="card-body p-5">
+            <div class="w-auto p-3">
+
+                <h1 class="featurette-heading">Hirdetés keresés</h1>
+
+                <hr class="featurette-divider">
+
+                <div class="alert alert-info" role="alert">
+                    Az indulás vagy az érkezés helye Telki kell legyen! Válasszd ki a térkép segítségével az egyiket, a
+                    másik automatikusan Telki lesz.
+                </div>
+
+                <input
+                        id="pac-input1"
+                        class="controls"
+                        type="text"
+                        placeholder="Indulási hely"
+                        required
+                />
+                <input
+                        id="pac-input2"
+                        class="controls"
+                        type="text"
+                        placeholder="Érkezési hely"
+                        required
+                />
+                <div id="map"></div>
+
+                <hr class="featurette-divider">
+
+                <div class="form-group row">
+                    <label for="startAddress" class="col-sm-2 col-form-label font-weight-bold">Indulás helye</label>
+                    <div class="col-sm-10">
+                        <input type="text" readonly class="form-control-plaintext" id="startAddress"
+                               value="Válassz indulási helyet a térkép segítségével!">
+                        <input type="hidden" id="startLat" value="">
+                        <input type="hidden" id="startLng" value="">
+                        <input type="hidden" id="startPlaceID" value="">
+                    </div>
+                </div>
+
+                <hr class="featurette-divider">
+
+                <div class="form-group row">
+                    <label for="destinationAddress" class="col-sm-2 col-form-label font-weight-bold">Érkezés
+                        helye</label>
+                    <div class="col-sm-10">
+                        <input type="text" readonly class="form-control-plaintext" id="destinationAddress"
+                               value="Válassz érkezési helyet a térkép segítségével!">
+                        <input type="hidden" id="destinationLat" value="">
+                        <input type="hidden" id="destinationLng" value="">
+                        <input type="hidden" id="destinationPlaceID" value="">
+                    </div>
+                </div>
+
+                <hr class="featurette-divider">
+
+                <div class="form-group row">
+                    <label for="advType" class="col-sm-2 col-form-label font-weight-bold">Hirdetés típusa</label>
+                    <div class="col-sm-4">
+                        <select class="form-control" id="advType">
+                            <option>Sofőr</option>
+                            <option>Utas</option>
+                        </select>
+                    </div>
+                </div>
+
+                <hr class="featurette-divider">
+
+                <div class="alert alert-secondary" role="alert">
+                    Ha nem töltöd ki a dátumot, akkor az összes napra tudsz keresni!
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label font-weight-bold">Indulás ideje</label>
+                    <div class="col-sm-4">
+                        Nap:
+                        <div class="bootstrap-iso">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="form-group ">
+                                        <div class="input-group">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-calendar">
+                                                </i>
+                                            </div>
+                                            <input autocomplete="off" class="form-control" id="datum"
+                                                   name="datum"
+                                                   placeholder="HH/NN/EEEE"
+                                                   type="text" required/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        Óra:
+                        <select class="form-control" id="ora">
+                            <option th:each="i : ${#numbers.sequence(0, 23)}" th:value="${i}" th:text="${i}">
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col-sm-2">
+                        Perc:
+                        <select class="form-control" id="perc">
+                            <option th:each="i : ${#numbers.sequence(0, 59)}" th:value="${i}" th:text="${i}">
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+                <hr class="featurette-divider">
+
+                <div class="alert alert-secondary" role="alert">
+                    Kérlek adj meg egy rugalmasságot százalékban, hogy maximum mekkora eltérést szeretnél!
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label font-weight-bold">Rugalmasság</label>
+                    <div class="col-sm-4">
+                        Időbeli eltérés %-ban
+                        <select class="form-control" id="timeFlexibilityPercentage">
+                            <option th:each="i : ${#numbers.sequence(0, 20)}" th:value="${i * 5}" th:text="${i * 5}">
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col-sm-4">
+                        Távolság beli eltérés %-ban
+                        <select class="form-control" id="distanceFlexibilityPercentage">
+                            <option th:each="i : ${#numbers.sequence(0, 20)}" th:value="${i * 5}" th:text="${i * 5}">
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+                <button id="searchButton" type="button" class="btn btn-primary">Keresés</button>
+
+                <div class="table-responsive border-0 my-3">
+                    <table class="table table-hover" id="fuvar_data_table">
+                        <thead id="thead_data"></thead>
+                        <tbody id="tbody_data"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+
+<!-- Extra JavaScript/CSS added manually in "Settings" tab -->
+<!-- Include jQuery -->
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<!-- Include Date Range Picker -->
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+
+<script src="js/DatePicker.js"></script>
+<script src="js/allAdvertisementListHandlerAjax.js"></script>
+
+</body>
+</html>

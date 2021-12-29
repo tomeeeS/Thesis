@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <title>Fuvar választás</title>
+</head>
+<body style="background: url(https://wallpaperxyz.com/wp-content/uploads/Website-Background-Images-HD-Free-Download-Wallpaperxyz.com-36.jpg) no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  background-size: cover;
+  -o-background-size: cover;">
+
+<nav th:replace="fragments/nav :: nav"></nav>
+
+<div th:if="${(fuvarokToBeRatedAsSofor != null && !fuvarokToBeRatedAsSofor.isEmpty()) ||
+ (fuvarokToBeRatedAsUtas != null && !fuvarokToBeRatedAsUtas.isEmpty())}">
+    <nav th:replace="fragments/feedback-notification :: feedback"></nav>
+</div>
+
+<div class="container mx-auto" style="max-width: 1000px">
+    <div class="card border-0 shadow my-5">
+        <div class="card-body p-5">
+
+            <div class="p-5 text-center" style="background: yellow">
+                <h2>Válassz a felsoroltak közül!</h2>
+                <h4>Válaszd ki a meglévő fuvar hirdetéseid közül, hogy melyikhez szeretnéd az utast csatolni. A
+                    csatlolásról mindkét félt e-mail-ben értesítjük. Ha nincs megfelelő fuvar hirdetésed még akkor az
+                    oldal tetején könnyedén hirdethetsz.</h4>
+            </div>
+
+            <ul class="list-group">
+                <li class="list-group-item my-3 border"><h3>Utas hirdetés részletei:</h3>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th scope="col">Hirdető</th>
+                                <th scope="col">Indulás időpontja</th>
+                                <th scope="col">Indulás helye</th>
+                                <th scope="col">Uticél</th>
+                                <th scope="col">Utasok száma</th>
+                                <th scope="col">Részletek</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td><span th:text="${hirdetes.hirdeto.fullName}"></span></td>
+                                <td><span th:text="${hirdetes.indulasiIdoString}"></span></td>
+                                <td><span th:text="${hirdetes.indulasiHely}"></span></td>
+                                <td><span th:text="${hirdetes.uticel}"></span></td>
+                                <td><span th:text="${hirdetes.utasokSzama}"></span></td>
+                                <td><span th:text="${hirdetes.info}"></span></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </li>
+                <li class="list-group-item my-3 border"><h3>Saját fuvarjaim</h3>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th scope="col">Indulási időpontja</th>
+                                <th scope="col">Indulás helye</th>
+                                <th scope="col">Uticél</th>
+                                <th scope="col">Szabad hely / Összes hely</th>
+                                <th scope="col">Művelet</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="fuvar : ${fuvarok}" th:id="${fuvar.id}">
+                                <td><span th:text="${fuvar.indulasiIdoString}"></span></td>
+                                <td><span th:text="${fuvar.indulasiHely}"></span></td>
+                                <td><span th:text="${fuvar.uticel}"></span></td>
+                                <td><span th:text="${fuvar.szabadHely}"></span> / <span
+                                        th:text="${fuvar.capacity}"></span></td>
+                                <td>
+                                    <form th:action="@{'/hirdetes/' + ${hirdetes.id} + '/attach-fuvar/' + ${fuvar.id}}"
+                                          method="post">
+                                        <input class="btn btn-primary mx-auto" type="submit" value="Ezzel viszlek el"/>
+                                    </form>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </li>
+            </ul>
+
+        </div>
+    </div>
+</div>
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+</body>
+</html>

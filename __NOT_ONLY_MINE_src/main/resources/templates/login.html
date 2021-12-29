@@ -1,0 +1,73 @@
+﻿<!doctype html>
+<html lang="hu" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <title>Bejelentkezés</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!--Reference Bootstrap files-->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+            integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+            crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body style="background: url(https://wallpaperxyz.com/wp-content/uploads/Website-Background-Images-HD-Free-Download-Wallpaperxyz.com-36.jpg) no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  background-size: cover;
+  -o-background-size: cover;">
+
+<div class="d-flex align-items-center min-vh-100">
+    <div class="mx-auto shadow-lg p-3 mb-5 text-dark bg-white rounded"
+         style="min-width: 10cm; max-width: 12cm;">
+
+        <form th:action="@{/login}" method="post">
+            <div id="loginbox">
+
+                <div th:if="${param.error}" class="alert alert-danger col-xs-offset-1 col-xs-10">
+                    Hibás felhasználónév vagy jelszó.
+                </div>
+                <div th:if="${param.logout}" class="alert alert-success col-xs-offset-1 col-xs-10">
+                    Sikeres kijelentkezés.
+                </div>
+
+                <div class="mb-4 text-center">
+                    <h2>Bejelentkezés</h2>
+                </div>
+
+                <div class="form-group">
+                    Email cím
+                    <input type="email" name="username" class="form-control" id="exampleInputEmail1"
+                           aria-describedby="emailHelp" placeholder="példa@valami.hu" required>
+                </div>
+                <div class="form-group">
+                    Jelszó
+                    <input type="password" name="password" class="form-control" id="exampleInputPassword1"
+                           placeholder="Jelszó"
+                           required>
+                </div>
+                <button type="submit" class="btn btn-primary">Belépés</button>
+                <a href="/user/registration">Regisztráció</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+
+</body>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+		  integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+	<!-- Special version of Bootstrap that only affects content wrapped in .bootstrap-iso -->
+	<link rel="stylesheet" href="https://formden.com/static/cdn/bootstrap-iso.css"/>
+
+	<!--Font Awesome (added because you use icons in your prepend/append)-->
+	<link rel="stylesheet" href="https://formden.com/static/cdn/font-awesome/4.4.0/css/font-awesome.min.css"/>
+
+	<title>Add car</title>
+</head>
+<body style="background: url(https://wallpaperxyz.com/wp-content/uploads/Website-Background-Images-HD-Free-Download-Wallpaperxyz.com-36.jpg) no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  background-size: cover;
+  -o-background-size: cover;">
+
+<nav th:replace="fragments/nav :: nav"></nav>
+
+<div th:if="${(fuvarokToBeRatedAsSofor != null && !fuvarokToBeRatedAsSofor.isEmpty()) ||
+ (fuvarokToBeRatedAsUtas != null && !fuvarokToBeRatedAsUtas.isEmpty())}">
+	<nav th:replace="fragments/feedback-notification :: feedback"></nav>
+</div>
+
+<div class="container mx-auto" style="max-width: 700px">
+	<div class="card border-0 shadow my-5">
+		<div class="card-body p-5">
+
+			<div class="mb-4 p-5 text-center" style="background: yellow">
+				<h4>Autó hozzáadása</h4>
+				Figyelmesen add meg az adatokat.
+			</div>
+
+			<form th:action="@{/user/add-car}" th:object="${auto}" method="POST">
+
+				<!--			TODO error handling-->
+				<!--			<div th:if="${error != null}" class="alert alert-danger col-xs-offset-1 col-xs-10">-->
+				<!--				Hibás adatok.-->
+				<!--			</div>-->
+
+				<!--			TODO form fields-->
+				<div class="form-group">
+					<label for="validationCustom06">Hány utas szállítására alkalmas?</label>
+					<select th:field="*{maxUtasSzam}" class="form-control" id="validationCustom06">
+						<option th:each="i : ${#numbers.sequence(1, 10)}" th:value="${i}" th:text="${i}">
+						</option>
+					</select>
+					<div class="valid-feedback">
+						Jónak látszik!
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="validationCustom03">Típus</label>
+					<input th:field="*{tipus}" type="text" class="form-control" id="validationCustom03"
+						   placeholder="pl: Toyota">
+				</div>
+				<div class="form-group">
+					<label for="validationCustom02">Szín</label>
+					<input th:field="*{szin}" type="text" class="form-control" id="validationCustom02"
+						   placeholder="pl: piros">
+				</div>
+				<div class="form-group">
+					<label for="validationCustom04">Rendszám</label>
+					<input th:field="*{rendszam}" type="text" class="form-control" id="validationCustom04"
+						   placeholder="ABC-123" required>
+					<div class="valid-feedback">
+						Jónak látszik!
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="validationCustom05">Autó külseje</label>
+					<input th:field="*{autoLeiras}" type="text" class="form-control" id="validationCustom05"
+						   placeholder="pl: egyedi azonosító(k)">
+					<div class="valid-feedback">
+						Jónak látszik!
+					</div>
+				</div>
+				<button type="submit" class="btn btn-primary">Hozzáad</button>
+
+			</form>
+		</div>
+	</div>
+</div>
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+		integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+		crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+		integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+		crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+		integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+		crossorigin="anonymous"></script>
+
+<!-- Extra JavaScript/CSS added manually in "Settings" tab -->
+<!-- Include jQuery -->
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<!-- Include Date Range Picker -->
+<script type="text/javascript"
+		src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+<link rel="stylesheet"
+	  href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
+
+</body>
+</html>

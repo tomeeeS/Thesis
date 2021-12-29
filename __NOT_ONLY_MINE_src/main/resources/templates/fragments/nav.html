@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark static-top" style="background: none" th:fragment="nav">
+    <div class="container" style="max-width: 1000px">
+        <a class="navbar-brand" href="/home">Kezdőoldal</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+                aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav mr-auto">
+                <li sec:authorize="isAnonymous()" class="nav-item">
+                    <a class="nav-link" href="/login">Bejelentkezés</a>
+                </li>
+                <li sec:authorize="isAnonymous()" class="nav-item">
+                    <a class="nav-link" href="/user/registration">Regisztráció</a>
+                </li>
+                <li sec:authorize="isAuthenticated()" class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                       data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">
+                        Hirdetés feladás
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="/driverADV">Sofőrként</a>
+                        <a class="dropdown-item" href="/passangerADV">Utasként</a>
+                    </div>
+                </li>
+                <li sec:authorize="isAuthenticated()" class="nav-item"><a class="nav-link" href="/allAdvertisement">Hirdetés keresés</a>
+                </li>
+                <li sec:authorize="isAuthenticated()" class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                       data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">
+                        Teszt oldalak
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="/fuvarok/sajatok">Hirdetéseim</a>
+                        <a class="dropdown-item" href="/fuvarok/jelentkezes">Jelentkezés</a>
+                        <a class="dropdown-item" href="/fuvarok/jelentkezett">Jelentkezéseim</a>
+                        <a class="dropdown-item" href="/osszes-utam">Összes utam</a>
+                    </div>
+                </li>
+
+            </ul>
+
+            <ul sec:authorize="isAuthenticated()" class="nav navbar-nav ml-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown"
+                       aria-haspopup="true"
+                       aria-expanded="false">
+                        <span sec:authentication="name"></span>
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="/profil">Saját oldal</a>
+                        <div class="dropdown-divider"></div>
+                        <form class="dropdown-item" th:action="@{/logout}" method="post"><input class="dropdown-item"
+                                                                                                type="submit"
+                                                                                                value="Kilépés"/></form>
+                    </div>
+                </li>
+            </ul>
+
+        </div>
+    </div>
+</nav>
+
+</body>
+</html>

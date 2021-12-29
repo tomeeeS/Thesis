@@ -1,0 +1,37 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<title>Test page titel</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	<script src="js/test.js"></script>
+</head>
+<body>
+
+<!-- ${name}
+Model változó: Előre tudjuk, hogy ezen az oldalon mindig szükség lesz erre az információra
+és már renderelésnél átadjuk a view-nak a controllerben, hogy itt, html-ben (pontosabban thymeleaf template-ben)
+be tudjuk ágyazni, kb konstansként. -->
+<p th:text="'Hello, ' + ${name} + '!'"/>
+
+<div>
+	<textarea id="echoText"></textarea>
+	<button id="echoButton">Echo</button>
+	<!-- AJAX-al, dinamikusan kapott információk megjelenítése: egy előre megadott id-jú placeholder element
+	vagy üres div amit majd javascriptből töltünk fel az ajax kérés válaszával kapott adatok alapján-->
+	<label id="echoLabel"></label>
+</div>
+<div>
+	<button id="listButton">List</button>
+	<label id="listLabel"></label>
+</div>
+
+<form th:action="@{/logout}" method="post"><input class="logoutbutton" type="submit" value="Sign Out"/></form>
+
+</body>
+</html>
+
+
+<!-- A Thymeleaf(az a templating engine amit használunk az odlalak megjelenítésére) template-ek tudnak örökölni egymásból
+meaning ami minden oldalon ugyanaz: fejléc, navbar, footer részek magukban mehetnek külön fájlba
+és az összes többiben csak bereferenciázzuk őket.-->

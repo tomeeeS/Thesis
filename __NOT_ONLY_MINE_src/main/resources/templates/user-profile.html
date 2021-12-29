@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <title>Saját oldal</title>
+</head>
+<body style="background: url(https://wallpaperxyz.com/wp-content/uploads/Website-Background-Images-HD-Free-Download-Wallpaperxyz.com-36.jpg) no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  background-size: cover;
+  -o-background-size: cover;">
+
+<nav th:replace="fragments/nav :: nav"></nav>
+
+<div th:if="${(fuvarokToBeRatedAsSofor != null && !fuvarokToBeRatedAsSofor.isEmpty()) ||
+ (fuvarokToBeRatedAsUtas != null && !fuvarokToBeRatedAsUtas.isEmpty())}">
+    <nav th:replace="fragments/feedback-notification :: feedback"></nav>
+</div>
+
+<div class="container mx-auto" style="max-width: 1000px">
+    <div class="card border-0 shadow my-5">
+        <div class="card-body p-5">
+            <div class="w-auto p-3">
+                <h1 class="featurette-heading">Saját oldal</h1>
+
+                <hr class="featurette-divider">
+
+                <table class="table table-hover border shadow p-3 mb-5 bg-white rounded">
+                    <tbody>
+                    <tr>
+                        <td><h5>Teljes név</h5></td>
+                        <td><h5 th:text="${user.fullName}"></h5></td>
+                    </tr>
+                    <tr>
+                        <td><h5>Email cím</h5></td>
+                        <td><h5 th:text="${user.email}"></h5></td>
+                    </tr>
+                    <tr>
+                        <td><h5>Telefonszám</h5></td>
+                        <td><h5 th:text="${user.tel}"></h5></td>
+                    </tr>
+                    <tr>
+                        <td><h5>Jelszó változtatás</h5></td>
+                        <td><a href="/user/password-change" class="btn btn-primary">Változtatás</a></td>
+                    </tr>
+                    <tr>
+                        <td><h5>Autó hozzáadás</h5></td>
+                        <td><a href="/user/add-car" class="btn btn-primary">Hozzáadás</a></td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <div th:if="${(fuvarokToBeRatedAsSofor != null && !fuvarokToBeRatedAsSofor.isEmpty()) ||
+ (fuvarokToBeRatedAsUtas != null && !fuvarokToBeRatedAsUtas.isEmpty())}">
+
+                    <hr class="featurette-divider">
+
+                    <div class="alert alert-warning" role="alert">
+                        Elérhető egy értékelés, kérlek értékeld az alábbi utazást!
+                    </div>
+
+                    <ul class="list-group">
+                        <div th:if="${!fuvarokToBeRatedAsSofor.isEmpty()}">
+                            <li class="list-group-item my-3 border shadow p-3 mb-5 bg-white rounded">
+                                <h3>Kérjük adj visszajelzést elmúlt saját fuvarjaidról:</h3>
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <tbody>
+                                        <tr th:each="fuvar : ${fuvarokToBeRatedAsSofor}">
+                                            <td th:text="${fuvar.indulasiIdoString}"></td>
+                                            <!--TODO uticél vagy vlami egyéb azonosító, x napja történt, hegyértelmű legyen, melyik fuvar-->
+                                            <td><a th:href="@{'/fuvar/feedback/' + ${fuvar.id}}"
+                                                   class="btn btn-primary">Értékelem</a>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </li>
+                        </div>
+                        <div th:if="${!fuvarokToBeRatedAsUtas.isEmpty()}">
+                            <li class="list-group-item my-3 border shadow p-3 mb-5 bg-white rounded">
+                                <h3>Kérjük adj visszajelzést elmúlt utazásaidról:</h3>
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <tbody>
+                                        <tr th:each="fuvar : ${fuvarokToBeRatedAsUtas}">
+                                            <td th:text="${fuvar.indulasiIdoString}"></td>
+                                            <!--TODO uticél vagy vlami egyéb azonosító-->
+                                            <td th:text="${fuvar.sofor.fullName}"></td>
+                                            <td><a th:href="@{'/fuvar/feedback/' + ${fuvar.id}}"
+                                                   class="btn btn-primary">Értékelem</a>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </li>
+                        </div>
+                    </ul>
+                </div>
+
+                <hr class="featurette-divider">
+
+                <div class="alert alert-info" role="alert">
+                    Itt jelennek meg a hirdetéseid, jelentkezéseid és kreditjeid ha vannak.
+                </div>
+
+                <div th:if="${!sajatFuvarok.isEmpty()}">
+                    <ul class="list-group">
+                        <li class="list-group-item my-3 border shadow p-3 mb-5 bg-white rounded"><h3>Hirdetéseim:</h3>
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">Indulás időpontja</th>
+                                        <th scope="col">Honnan</th>
+                                        <th scope="col">Hova</th>
+                                        <th scope="col">Szabad hely / Összes hely</th>
+                                        <th scope="col"></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="fuvar : ${sajatFuvarok}">
+                                        <td><span th:text="${fuvar.indulasiIdoString}"></span></td>
+                                        <td><span th:text="${fuvar.indulasiHely}"></span></td>
+                                        <td><span th:text="${fuvar.uticel}"></span></td>
+                                        <td><span th:text="${fuvar.szabadHely}"></span> / <span
+                                                th:text="${fuvar.capacity}"></span></td>
+                                        <td><a th:href="@{'/fuvar/' + ${fuvar.id}}"
+                                               class="btn btn-primary">Részletek</a></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div th:if="${!fuvarIgenyek.isEmpty()}">
+                    <ul class="list-group">
+                        <li class="list-group-item my-3 border shadow p-3 mb-5 bg-white rounded"><h3>Fuvar
+                            igényeim:</h3>
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">Indulás időpontja</th>
+                                        <th scope="col">Honnan</th>
+                                        <th scope="col">Hova</th>
+                                        <th scope="col">Utasok száma</th>
+                                        <th scope="col"></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="igeny : ${fuvarIgenyek}">
+                                        <td><span th:text="${igeny.indulasiIdoString}"></span></td>
+                                        <td><span th:text="${igeny.indulasiHely}"></span></td>
+                                        <td><span th:text="${igeny.uticel}"></span></td>
+                                        <td><span th:text="${igeny.utasokSzama}"></span></td>
+                                        <td><a th:href="@{'/hirdetes/' + ${igeny.id}}"
+                                               class="btn btn-primary">Részletek</a>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div th:if="${!jelentkezettFuvarok.isEmpty()}">
+                    <ul class="list-group">
+                        <li class="list-group-item my-3 border shadow p-3 mb-5 bg-white rounded"><h3>
+                            Jelentkezéseim:</h3>
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">Indulás időpontja</th>
+                                        <th scope="col">Honnan</th>
+                                        <th scope="col">Hova</th>
+                                        <th scope="col">Szabad hely / Összes hely</th>
+                                        <th scope="col"></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="fuvar : ${jelentkezettFuvarok}">
+                                        <td><span th:text="${fuvar.indulasiIdoString}"></span></td>
+                                        <td><span th:text="${fuvar.indulasiHely}"></span></td>
+                                        <td><span th:text="${fuvar.uticel}"></span></td>
+                                        <td><span th:text="${fuvar.szabadHely}"></span> / <span
+                                                th:text="${fuvar.capacity}"></span></td>
+                                        <td><a th:href="@{'/fuvar/' + ${fuvar.id}}"
+                                               class="btn btn-primary">Részletek</a></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div th:if="${!creditHistory.isEmpty()}">
+                    <ul class="list-group">
+                        <!--TODO-->
+                        <li class="list-group-item my-3 border shadow p-3 mb-5 bg-white rounded"><h3
+                                th:text="'Krediteim: ' + ${user.kredit}">
+                            creditHistory:</h3>
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">Kredit változás történet</th>
+                                        <th scope="col">Dátum</th>
+                                        <th scope="col">Kapcsolódó fuvar</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="creditEntry : ${creditHistory}">
+                                        <td><span th:text="${creditEntry.getValueChange()}"></span></td>
+                                        <td><span th:text="${creditEntry.getTimestampString()}"></span></td>
+                                        <td><a th:href="@{'/fuvar/' + ${creditEntry.fuvar.id}}" class="btn btn-primary">Részletek</a>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+</body>
+</html>

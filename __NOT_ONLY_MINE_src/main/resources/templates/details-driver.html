@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <title>Utazás részletei</title>
+</head>
+<body style="background: url(https://wallpaperxyz.com/wp-content/uploads/Website-Background-Images-HD-Free-Download-Wallpaperxyz.com-36.jpg) no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  background-size: cover;
+  -o-background-size: cover;">
+
+<nav th:replace="fragments/nav :: nav"></nav>
+
+<div th:if="${(fuvarokToBeRatedAsSofor != null && !fuvarokToBeRatedAsSofor.isEmpty()) ||
+ (fuvarokToBeRatedAsUtas != null && !fuvarokToBeRatedAsUtas.isEmpty())}">
+    <nav th:replace="fragments/feedback-notification :: feedback"></nav>
+</div>
+
+<div class="container my-auto" style="max-width: 1000px">
+    <div class="card border-0 shadow my-5">
+        <div class="card-body p-5">
+
+            <div th:if="${iAmDriver}">
+                <form th:action="@{'/fuvar/lemondas/' + ${fuvar.id}}" method="get">
+                    <div class="p-5 text-center" style="background: yellow">
+                        <h2>Részletek</h2>
+                        <h4>Egy gombnyomásra akár le is mondhatod az utazást.</h4>
+                        <input class="btn btn-secondary btn-lg mx-auto" type="submit" value="Lemondás"
+                               style="max-width: 200px"/>
+                    </div>
+
+                </form>
+            </div>
+            <div th:if="${iAmPassenger}">
+                <form th:action="@{'/fuvar/lejelentkezes/' + ${fuvar.id}}" method="get">
+
+                    <div class="p-5 text-center" style="background: yellow">
+                        <h2>Részletek</h2>
+                        <h4>Egy gombnyomásra akár le is jelentkezhetsz az utazásról.</h4>
+                        <input class="btn btn-secondary btn-lg mx-auto" type="submit" value="Lejelentkezés"
+                               style="max-width: 200px"/>
+                    </div>
+
+                </form>
+            </div>
+            <div th:if="${!iAmPassenger && !iAmDriver}">
+                <form th:action="@{'/fuvar/jelentkezes/' + ${fuvar.id}}" method="post">
+
+                    <div class="p-5 text-center" style="background: yellow">
+                        <h2>Részletek</h2>
+                        <h4>Jelentkezz az utazásra itt!</h4>
+                        <input class="btn btn-secondary btn-lg mx-auto" type="submit" value="Jelentkezes"
+                               style="max-width: 200px"/>
+                    </div>
+
+
+                </form>
+            </div>
+
+            <ul class="list-group">
+                <li class="list-group-item my-3 border"><h3>Út részletei:</h3>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th scope="col">Indulás időpontja</th>
+                                <th scope="col">Indulás helye</th>
+                                <th scope="col">Uticél</th>
+                                <th scope="col">További információk</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td><span th:text="${fuvar.indulasiIdoString}"></span></td>
+                                <td><span th:text="${fuvar.departure.getAddress()}"></span></td>
+                                <td><span th:text="${fuvar.destination.getAddress()}"></span></td>
+                                <td><span th:text="${fuvar.info}"></span></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </li>
+                <li class="list-group-item my-3 border"><h3>Sofőr részletei:</h3>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th scope="col">Sofőr neve</th>
+                                <th scope="col">Email cím</th>
+                                <th scope="col">Telefonszám</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>
+                                    <span th:text="${fuvar.sofor.fullName}"></span>
+                                    <span th:if="${!iAmDriver}" th:text="' (' + ${fuvar.sofor.getRatingString()} + '*)'"></span>
+                                </td>
+                                <td><span th:text="${fuvar.sofor.email}"></span></td>
+                                <td><span th:text="${fuvar.sofor.tel}"></span></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </li>
+                <li class="list-group-item my-3 border">
+                    <span class="h3"
+                          th:text="${fuvar.osszesUtas.size() > 1} ? 'Utasok részletei:' : 'Utas részletei:'"></span>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th scope="col">Utas neve</th>
+                                <th scope="col">Email cím</th>
+                                <th scope="col">Telefonszám</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="utas: ${fuvar.utasok}">
+                                <td>
+                                    <span th:text="${utas.fullName}"></span>
+                                    <span th:if="${iAmDriver}" th:text="' (' + ${utas.getRatingString()} + '*)'"></span>
+                                </td>
+                                <td><span th:text="${utas.email}"></span></td>
+                                <td><span th:text="${utas.tel}"></span></td>
+                            </tr>
+                            <tr th:each="igeny: ${fuvar.elvallaltIgenyek}">
+                                <td>
+                                    <span th:text="${igeny.hirdeto.fullName}"></span>
+                                    <span th:if="${iAmDriver}" th:text="' (' + ${igeny.hirdeto.getRatingString()} + '*)'"></span>
+                                    <span th:text="${igeny.utasokSzama > 1} ? ' +' + ${igeny.utasokSzama - 1} : ''"></span>
+                                </td>
+                                <td><span th:text="${igeny.hirdeto.email}"></span></td>
+                                <td><span th:text="${igeny.hirdeto.tel}"></span></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </li>
+                <li class="list-group-item my-3 border"><h3>Gépjármű részletei:</h3>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th scope="col">Gépjármű rendszáma</th>
+                                <th scope="col">Gépjármű részletei</th>
+                                <th scope="col">Összes férőhely</th>
+                                <th scope="col">Szabad férőhely</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td><span th:text="${fuvar.rendszam}"></span></td>
+                                <td><span th:text="${fuvar.autoLeiras}"></span></td>
+                                <td><span th:text="${fuvar.capacity}"></span></td>
+                                <td><span th:text="${fuvar.szabadHely}"></span></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+</body>
+</html>

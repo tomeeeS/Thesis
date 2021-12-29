@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <title>Hello, world!</title>
+</head>
+<body style="background: url(https://wallpaperxyz.com/wp-content/uploads/Website-Background-Images-HD-Free-Download-Wallpaperxyz.com-36.jpg) no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  background-size: cover;
+  -o-background-size: cover;">
+
+<nav th:replace="fragments/nav :: nav"></nav>
+
+<div th:if="${(fuvarokToBeRatedAsSofor != null && !fuvarokToBeRatedAsSofor.isEmpty()) ||
+ (fuvarokToBeRatedAsUtas != null && !fuvarokToBeRatedAsUtas.isEmpty())}">
+    <nav th:replace="fragments/feedback-notification :: feedback"></nav>
+</div>
+
+<div class="container my-auto" style="max-width: 1000px">
+    <div class="card border-0 shadow my-5">
+        <div class="card-body p-5">
+
+            <div th:if="${iAmAdvertiser}">
+                <form th:action="@{'/hirdetes/lemondas/' + ${hirdetes.id}}" method="get">
+                    <div class="p-5 text-center" style="background: yellow">
+                        <h2>Részletek</h2>
+                        <h4>Egy gombnyomásra akár le is mondhatod a hirdetést.</h4>
+                        <input class="btn btn-secondary btn-lg mx-auto" type="submit" value="Lemondás"
+                               style="max-width: 200px"/>
+                    </div>
+                </form>
+            </div>
+            <div th:if="${!iAmAdvertiser && iCanGiveALift}">
+                <form th:action="@{'/hirdetes/chose-fuvar/' + ${hirdetes.id}}" method="get">
+
+                    <div class="p-5 text-center" style="background: yellow">
+                        <h2>Részletek</h2>
+                        <h4>Kattints a gombra ha szeretnéd elvinni ezt az utast, utána válaszd ki, hogy melyik
+                            fuvarhirdetésedhez akarod csatolni.</h4>
+                        <input class="btn btn-secondary btn-lg mx-auto" type="submit" value="Elviszlek"
+                               style="max-width: 200px"/>
+                    </div>
+
+                </form>
+            </div>
+            <div th:if="${!iAmAdvertiser && !iCanGiveALift}">
+                <!--  TODO  nincs kész-->
+                <form th:action="@{'/sajatfuvar/hirdetes-alapjan/' + ${hirdetes.id}}" method="post">
+                    <input class="btn btn-secondary btn-lg mx-auto my-auto" type="submit"
+                           value="Elviszlek (uj fuvar) (nem működik)"/>
+                </form>
+            </div>
+
+            <ul class="list-group">
+                <li class="list-group-item my-3 border"><h3>Hirdetés részletei:</h3>
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th scope="col">Hirdető</th>
+                                <th scope="col">Indulás időpontja</th>
+                                <th scope="col">Indulás helye</th>
+                                <th scope="col">Uticél</th>
+                                <th scope="col">Utasok száma</th>
+                                <th scope="col">Részletek</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td><span th:text="${hirdetes.hirdeto.fullName}"></span></td>
+                                <td><span th:text="${hirdetes.indulasiIdoString}"></span></td>
+                                <td><span th:text="${hirdetes.indulasiHely}"></span></td>
+                                <td><span th:text="${hirdetes.uticel}"></span></td>
+                                <td><span th:text="${hirdetes.utasokSzama}"></span></td>
+                                <td><span th:text="${hirdetes.info}"></span></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </li>
+            </ul>
+
+            <div th:if="${hirdetes.fuvar != null}">
+                <p>Már kapcsolódó fuvar:</p>
+                <form th:action="@{'/fuvar/' + ${hirdetes.fuvar.id}}" method="get">
+                    <input class="btn btn-secondary btn-lg mx-auto my-auto" type="submit" value="Részletek"/>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+</body>
+</html>
